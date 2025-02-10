@@ -15,4 +15,8 @@ It may communicate with a database or perform calculations.
 Backend Sends a Response
 
 The processed data is sent back to the frontend.
+<<<<<<< HEAD
 The frontend displays the result to the user.
+=======
+The frontend displays the result to the user.
+>>>>>>> ae1cae1eeae0a6538750d7aef13ec34ef7df62bc
