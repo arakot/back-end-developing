@@ -32,6 +32,15 @@ def get_user(name):     # function to get a user by name
     if user:    # if the user is found
         return jsonify(user), 200    # return the user and 200 status code  which means the request was successful
     return  jsonify({"message": "User not found"}), 404     # return a message and 404 status code which means the resource was not found   
-    
+
+
+@app.route('/user/<int:id>', methods=['DELETE']) # route to delete a user by id
+def delete_user(id): # function to delete a user
+    user = next((user for user in users if user['id'] == id), None) # search for the user by id
+    if user: # if the user is found
+        users.remove(user) # remove the user from the list of users
+        return jsonify({"message": "User deleted"}), 200 # return a message and 200 status code which means the request was successful
+    return jsonify({"message": "User not found"}), 404 # return a message and 404 status code which means the resource was not found
+
 if __name__=="__main__":    # If the script is executed directly, the code block will be executed.
     app.run(debug=True) # run the application on the local development server
