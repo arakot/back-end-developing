@@ -5,7 +5,7 @@ app = Flask(__name__) # create an instance of the Flask class
 
 users = [
     {'id': 1, 'name': 'John'},
-    {'id': 2, 'name': 'Jane'}
+    {'id': 2, 'name': 'Jane', "email": "Jane@gmail.com"}
 ] # list of users to be used in the application
 
 @app.route('/') # route() decorator to tell Flask what URL should trigger our function
@@ -46,10 +46,11 @@ def delete_user(id): # function to delete a user
 @app.route('/user/<int:id>', methods=['PUT']) # route to update a user
 def update_user(id): # function to update a user
     data = request.get_json() # get the data sent with the PUT request
+    
     user = next((user for user in users if user['id'] == id), None) # search for the user by id 
     if user: # if the user is found
         user['name'] = data['name'] # update the user's name
-        return jsonify(user), 200 # return the user and 200 status code which means the request was successful  
+        return jsonify({"message": "User updated successfully", "user": user}), 200  # return success with user data
     return jsonify({"message": "User not found"}), 404
         
 if __name__=="__main__":    # If the script is executed directly, the code block will be executed.
