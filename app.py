@@ -4,7 +4,7 @@ app = Flask(__name__) # create an instance of the Flask class
 
 
 users = [
-    {'id': 1, 'name': 'John'},
+    {'id': 1, 'name': 'John', "email": "John@gmail.com"},
     {'id': 2, 'name': 'Jane', "email": "Jane@gmail.com"}
 ] # list of users to be used in the application
 
@@ -20,7 +20,9 @@ def add_user(): # function to add a new user
     data = request.get_json() # get the data sent with the POST request
     new_user ={  # create a new user object
         'id': len(users)+1, # generate a new id for the new user
-        'name': data['name'] # get the name of the new user from the request data
+        'name': data['name'], # get the name of the new user from the request data
+        'email': data['email'] # get the email of the new user from the request data    
+            
     }
     users.append(new_user) # add the new user to the list of users
     return jsonify(new_user), 201 # 201 status code means that a new resource has been created
@@ -50,6 +52,7 @@ def update_user(id): # function to update a user
     user = next((user for user in users if user['id'] == id), None) # search for the user by id 
     if user: # if the user is found
         user['name'] = data['name'] # update the user's name
+        user['email'] = data['email'] # update the user's email
         return jsonify({"message": "User updated successfully", "user": user}), 200  # return success with user data
     return jsonify({"message": "User not found"}), 404
         
