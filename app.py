@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request # import the Flask class and other modules from the Flask package
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 
 app = Flask(__name__) # create an instance of the Flask class
@@ -7,7 +7,7 @@ app.config['JWT_SECRET_KEY'] = 'super-secret' # set the secret key for the JWT t
 jwt = JWTManager(app) # create an instance of the JWTManager class
 
 users = [
-    {'id': 1, 'username': 'admin', "password": "password"},
+    {'id': 1, 'name': 'admin', "password": "password"},
     {'id': 2, 'name': 'Jane', "email": "Jane@gmail.com"}
 ] # list of users to be used in the application
 
@@ -17,13 +17,13 @@ users = [
 def home(): 
     return "Hello, World!"
 
-app.route('/login', methods=['POST']) # route to login a user
+@app.route('/login', methods=['POST']) # route to login a user
 def login():
     data =request.get_json() # get the data sent with the POST request
-    username = data.get('username') # get the username from the data
+    username = data.get('name') # get the username from the data
     password = data.get('password') # get the password from the data
 
-    user = next((user for user in users if user['username'] == username and user['password'] == password), None) # search for the user by username and password 
+    user = next((user for user in users if user['name'] == username and user['password'] == password), None) # search for the user by username and password 
     if user: # if the user is found
         access_token = create_access_token(identity=username) # create an access token for the user
         return jsonify(access_token=access_token), 200 # return the access token and 200 status code which means the request was successful
@@ -45,7 +45,7 @@ def add_user(): # function to add a new user
 
 @app.route('/user/<name>', methods = ['GET'])   # route to get a user by name
 def get_user(name):     # function to get a user by name
-    user = next((user for user in users if user['name'] == name), None)     # search for the user by name
+    user = next((user for user in users if user['name'] == name), None)     # search for the user by 
     if user:    # if the user is found
         return jsonify(user), 200    # return the user and 200 status code  which means the request was successful
     return  jsonify({"message": "User not found"}), 404     # return a message and 404 status code which means the resource was not found   
@@ -61,6 +61,7 @@ def delete_user(id): # function to delete a user
 
 
 @app.route('/user/<int:id>', methods=['PUT']) # route to update a user
+@jwt_required() # require a JWT token to access this route
 def update_user(id): # function to update a user
     data = request.get_json() # get the data sent with the PUT request
     
